@@ -1,0 +1,12 @@
+anyconfig==0.9.10
+future==0.18.2
+imgaug==0.4.0
+matplotlib==3.1.2
+numpy
+opencv-python==4.1.2.30
+Polygon3==3.0.8
+pyclipper==1.1.0.post3
+PyYAML
+scikit-image==0.16.2
+Shapely==1.8.0
+tqdm

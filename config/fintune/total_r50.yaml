@@ -1,0 +1,89 @@
+name: DKE
+base: ['config/base.yaml']
+arch:
+  type: DKE
+  decode: 
+    type: Decode4 
+    c_in: 256 
+    num_point: 128
+    ro: 1.
+    evolve_stride: 4. 
+    down_sample: 4.0 
+    # for testing
+    box_thresh: 0.6 
+    epsilon: 0.002 
+    is_output_polygon: true 
+    ignore: true # must be true
+    thresh: 0.3 
+  backbone:
+    type: resnet50
+    pretrained: true
+  neck:
+    type: FPN
+    inner_channels: 256
+  head:
+    type: DKEHead
+metric:
+  # for reference only 
+  type: QuadMetrics
+  args:
+    is_output_polygon: true
+loss:
+  type: SEG_e2ec_dml
+  alpha: 1
+  beta: 0.25
+  gama: 0.25
+  ohem_ratio: 3
+  isnearest: false # false: OBGML true:NML
+optimizer:
+    type: Adam
+    args:
+      lr: 0.0002
+      weight_decay: 0
+      amsgrad: true
+lr_scheduler: polylr
+trainer:
+  seed: 2
+  epochs: 200
+  log_iter: 20
+  save_checkpoint_while_log: false
+  eval_every_epoch: 30
+  save_model_intr: 500
+  show_images_iter: 50
+  resume_checkpoint: ''
+  finetune_checkpoint: ''
+  output_dir: ''
+  tensorboard: false
+  wandb: false
+  project_name: evo_totaltext
+dataset:
+  train:
+    dataset:
+      args:
+        data_path:
+          - data/total_text/train.txt
+        img_mode: RGB
+    loader:
+      batch_size: 16
+      shuffle: true
+      pin_memory: true
+      num_workers: 4
+      collate_fn: 'EvoCollectFN'
+  validate:
+    dataset:
+      args:
+        data_path:
+          - data/total_text/test.txt
+        pre_processes:
+          - type: ResizeShortSize
+            args:
+              short_size: 736
+              resize_height: false
+              resize_text_polys: false
+        img_mode: RGB
+    loader:
+      batch_size: 1
+      shuffle: true
+      pin_memory: true
+      num_workers: 0
+      collate_fn: 'ICDARCollectFCN'
