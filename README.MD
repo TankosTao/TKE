@@ -11,6 +11,9 @@ python -m pip install -r requirement.txt
 
 
 ## Data Preparation
+
+refer to repo:https://github.com/WenmuZhou/OCR_DataSet to download related datasets
+
 The annotation file formats supported by our model are as follows, separated by "\t":
 
 ```
@@ -22,6 +25,9 @@ ch4_test_images/img_61.jpg    [{"transcription": "MASA", "points": [[310, 104], 
 
 
 ## Train
+
+
+
 1. config the `dataset['dataset']['train']['data_path']'`,`dataset['dataset']['validate']['data_path']`in [config/fintune/total_r50.yaml](config/fintune/total_r50.yaml)
 * Single gpu train
 ```
